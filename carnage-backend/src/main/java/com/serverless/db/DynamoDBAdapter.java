@@ -53,6 +53,12 @@ public class DynamoDBAdapter {
         mapper.save(answer);
     }
 
+
+    public void putTransaction(Question question) throws IOException{
+        DynamoDBMapper mapper = new DynamoDBMapper(client);
+        mapper.save(question);
+    }
+
     void createTransationsTable() throws IOException{
         if(!client.describeTable("question_table").getTable().getTableStatus().equals("ACTIVE")) {
             DynamoDBMapper mapper = new DynamoDBMapper(client);
