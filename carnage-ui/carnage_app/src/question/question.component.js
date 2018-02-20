@@ -68,11 +68,8 @@ class Question extends Component {
         } else if (this.timeoutReached) {
             this.message = 'Sorry - Time is up';
         } else {
-
-            axios.post('/user', {
-                firstName: 'Fred',
-                lastName: 'Flintstone'
-            })
+                // ${this.props.question_id}/${answer}/${user}
+            axios.post(`https://807npuj887.execute-api.us-west-1.amazonaws.com/dev/answer/`)
             .then((function(that){
                 return () => {
                     that.message = 'You answer was submitted'
