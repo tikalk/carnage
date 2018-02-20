@@ -51,7 +51,7 @@ provider:
 
 # you can add packaging information here
 package:
-  artifact: target/original-carnage-dev.jar
+  artifact: target/carnage-dev.jar
 
 functions:
   get-question:
