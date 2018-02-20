@@ -23,6 +23,7 @@ public class GetTransactionsHandler implements RequestHandler<Map<String, Object
 			String questionId = pathParameters.get("question_id");
 			LOG.info("Getting transactions for " + questionId);
 			tx = DynamoDBAdapter.getInstance().getTransactions(questionId);
+			LOG.debug("Question returns: " + tx);
 		} catch (Exception e) {
 			LOG.error(e, e);
 			Response responseBody = new Response("Failure getting transactions", input);
