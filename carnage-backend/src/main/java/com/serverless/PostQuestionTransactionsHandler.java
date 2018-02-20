@@ -20,6 +20,10 @@ public class PostQuestionTransactionsHandler implements RequestHandler<Map<Strin
     public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
         LOG.info("received: " + input);
         //lets get our path parameter for account_id
+        Map<String,String> headers = new HashMap<>();
+        headers.put("X-Powered-By", "AWS Lambda & serverless");
+        headers.put("Access-Control-Allow-Origin", "*");
+
         try{
             ObjectMapper mapper = new ObjectMapper();
             Map<String,String> pathParameters =  (Map<String,String>)input.get("pathParameters");
@@ -50,12 +54,13 @@ public class PostQuestionTransactionsHandler implements RequestHandler<Map<Strin
 			tx.setChoices(choicesMap).setQuestion(question).setRightAnswer(right_answer);
             DynamoDBAdapter.getInstance().putTransaction(tx);
         }catch(Exception e){
+
             LOG.error(e,e);
             Response responseBody = new Response("Failure putting transaction", input);
             return ApiGatewayResponse.builder()
                     .setStatusCode(500)
                     .setObjectBody(responseBody)
-                    .setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
+                    .setHeaders(headers)
                     .build();
         }
 
@@ -63,7 +68,7 @@ public class PostQuestionTransactionsHandler implements RequestHandler<Map<Strin
         return ApiGatewayResponse.builder()
                 .setStatusCode(200)
                 .setObjectBody(responseBody)
-                .setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
+                .setHeaders(headers)
                 .build();
     }
 }

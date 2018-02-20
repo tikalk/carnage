@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PostTransactionsHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
@@ -18,6 +19,10 @@ public class PostTransactionsHandler implements RequestHandler<Map<String, Objec
 	@Override
 	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 		LOG.info("received: " + input);
+		Map<String,String> headers = new HashMap<>();
+		headers.put("X-Powered-By", "AWS Lambda & serverless");
+		headers.put("Access-Control-Allow-Origin", "*");
+
 		//lets get our path parameter for account_id
 		try{
 			ObjectMapper mapper = new ObjectMapper();
@@ -44,7 +49,7 @@ public class PostTransactionsHandler implements RequestHandler<Map<String, Objec
 			return ApiGatewayResponse.builder()
 					.setStatusCode(500)
 					.setObjectBody(responseBody)
-					.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
+					.setHeaders(headers)
 					.build();
 		}
 
@@ -52,7 +57,7 @@ public class PostTransactionsHandler implements RequestHandler<Map<String, Objec
 		return ApiGatewayResponse.builder()
 				.setStatusCode(200)
 				.setObjectBody(responseBody)
-				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
+				.setHeaders(headers)
 				.build();
 	}
 }
