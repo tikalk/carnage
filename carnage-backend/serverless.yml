@@ -57,19 +57,21 @@ package:
   artifact: target/transactions-api-dev.jar
 
 functions:
-  get-transactions:
+  get-question:
     handler: com.serverless.GetTransactionsHandler
     events:
       - http:
-          path: /accounts/{account_id}/transactions
+          path: /question/{question_id}
           method: get
 
-  post-transaction:
+  post-question:
     handler: com.serverless.PostTransactionsHandler
     events:
       - http:
-          path: /accounts/{account_id}/transactions
+          path: /question/{question_id}
           method: post
+
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -112,20 +114,41 @@ functions:
 #       Value: "Some output value"
 resources:
   Resources:
-    transactionsTable:
+    questionTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: transactions_table
+        TableName: question_table
         AttributeDefinitions:
-          - AttributeName: account_id
+          - AttributeName: question_id
             AttributeType: S
-          - AttributeName: transaction_date
+          - AttributeName: qustion
+            AttributeType: S
+          - AttributeName: choices
+            AttributeType: S
+          - AttributeName: right_answer
             AttributeType: S
         KeySchema:
-          - AttributeName: account_id
+          - AttributeName: question_id
             KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    answerTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: answer_table
+        AttributeDefinitions:
+          - AttributeName: answer_id
+            AttributeType: S
           - AttributeName: transaction_date
-            KeyType: RANGE
+            AttributeType: S
+          - AttributeName: question_id
+            AttributeType: S
+          - AttributeName: user_name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: answer_id
+            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
