@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './question.component.css'
+import axios from 'axios'
 
 class Question extends Component {
 
@@ -27,14 +28,14 @@ class Question extends Component {
             <div className="App">
                 <h1>{this.props.question.question}</h1>
                 <form>
-                    <div class="answers">
+                    <div className="answers">
                         {
                             this.props.question.answers.map((item, index) => (
-                                <div>
+                                <div key={index}>
                                     <input type="radio" value={item} 
                                         checked={this.state.selectedAnswer === item} 
                                         onChange={(event) => this.handleOptionChange(event)}/>
-                                    <h3 className='answer' key={index}>{item}</h3>
+                                    <h3 className='answer'>{item}</h3>
                                 </div>
                             ))
                         }
@@ -50,10 +51,10 @@ class Question extends Component {
                 }
                 </div>
                 <div className="timer">
-                    <div class="wrapper">
-                        <div class="pie spinner"></div>
-                        <div class="pie filler"></div>
-                        <div class="mask"></div>
+                    <div className="wrapper">
+                        <div className="pie spinner"></div>
+                        <div className="pie filler"></div>
+                        <div className="mask"></div>
                     </div>
                 </div>
             </div>
@@ -67,7 +68,25 @@ class Question extends Component {
         } else if (this.timeoutReached) {
             this.message = 'Sorry - Time is up';
         } else {
-            this.message = 'Thank You!';
+
+            axios.post('/user', {
+                firstName: 'Fred',
+                lastName: 'Flintstone'
+            })
+            .then((function(that){
+                return () => {
+                    that.message = 'You answer was submitted'
+                    that.props.onSubmit();
+                    that.forceUpdate();
+                }
+            })(this))
+            .catch((function(that){
+                return (error) => {
+                    that.message = error.message;
+                    that.props.onSubmit();
+                    that.forceUpdate();
+                }
+            })(this));
         }
 
         this.answerSubmitted = true;
