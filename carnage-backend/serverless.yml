@@ -20,10 +20,7 @@ service: transactions-api
 provider:
   name: aws
   runtime: java8
-
-# you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
+  region: us-west-1
 
   iamRoleStatements:
     - Effect: "Allow"
