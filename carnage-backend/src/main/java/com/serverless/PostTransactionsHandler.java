@@ -7,10 +7,7 @@ import com.serverless.data.Answer;
 import com.serverless.db.DynamoDBAdapter;
 import org.apache.log4j.Logger;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class PostTransactionsHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
 
@@ -32,6 +29,7 @@ public class PostTransactionsHandler implements RequestHandler<Map<String, Objec
 			String user = pathParameters.get("user");
 			LOG.info("Posting answer for question " + question_id);
 			Answer tx = new Answer()
+					.setAnswer_id(UUID.randomUUID().toString())
 					.setQuestion_id(question_id)
 					.setTransaction_date(new Date())
 					.setAnswer(answer)
