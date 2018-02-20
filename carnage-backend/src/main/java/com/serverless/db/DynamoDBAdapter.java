@@ -52,7 +52,8 @@ public class DynamoDBAdapter {
         Map<String, AttributeValue> vals = new HashMap<>();
         vals.put(":val1",new AttributeValue().withS(userId));
         DynamoDBQueryExpression<Answer> queryExpression = new DynamoDBQueryExpression<Answer>()
-                .withKeyConditionExpression("user_name = :val1 ")
+                //.withKeyConditionExpression("user_name = :val1 ")
+                .withSelect("select * from answer_table where user_name = :val1")
                 .withExpressionAttributeValues(vals);
         return mapper.query(Answer.class, queryExpression);
     }
