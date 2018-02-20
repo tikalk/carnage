@@ -7,6 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class Answer {
 
     @DynamoDBHashKey(attributeName = "answer_id")
@@ -24,6 +26,9 @@ public class Answer {
 
     @DynamoDBAttribute(attributeName = "question_id")
     String question_id;
+
+    @DynamoDBAttribute(attributeName = "answer")
+    String answer;
 
     @DynamoDBAttribute(attributeName = "user_name")
     String userName;

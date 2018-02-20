@@ -68,7 +68,7 @@ functions:
     handler: com.serverless.PostTransactionsHandler
     events:
       - http:
-          path: /question/{question_id}
+          path: /answer/{question_id}/{answer}/{user}
           method: post
 
 
@@ -143,6 +143,8 @@ resources:
           - AttributeName: transaction_date
             AttributeType: S
           - AttributeName: question_id
+            AttributeType: S
+          - AttributeName: answer
             AttributeType: S
           - AttributeName: user_name
             AttributeType: S

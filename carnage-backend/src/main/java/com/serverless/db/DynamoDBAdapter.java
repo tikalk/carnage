@@ -9,7 +9,8 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.serverless.data.Transaction;
+import com.serverless.data.Answer;
+import com.serverless.data.Question;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -36,26 +37,26 @@ public class DynamoDBAdapter {
         return adapter;
     }
 
-    public List<Transaction> getTransactions(String accountId) throws IOException {
+    public List<Question> getTransactions(String questionId) throws IOException {
         DynamoDBMapper mapper = new DynamoDBMapper(client);
         Map<String, AttributeValue> vals = new HashMap<>();
-        vals.put(":val1",new AttributeValue().withS(accountId));
-        DynamoDBQueryExpression<Transaction> queryExpression = new DynamoDBQueryExpression<Transaction>()
-                .withKeyConditionExpression("account_id = :val1 ")
+        vals.put(":val1",new AttributeValue().withS(questionId));
+        DynamoDBQueryExpression<Question> queryExpression = new DynamoDBQueryExpression<Question>()
+                .withKeyConditionExpression("question_id = :val1 ")
                 .withExpressionAttributeValues(vals);
-        return mapper.query(Transaction.class, queryExpression);
+        return mapper.query(Question.class, queryExpression);
     }
 
 
-    public void putTransaction(Transaction transaction) throws IOException{
+    public void putTransaction(Answer answer) throws IOException{
         DynamoDBMapper mapper = new DynamoDBMapper(client);
-        mapper.save(transaction);
+        mapper.save(answer);
     }
 
     void createTransationsTable() throws IOException{
-        if(!client.describeTable("transactions_table").getTable().getTableStatus().equals("ACTIVE")) {
+        if(!client.describeTable("question_table").getTable().getTableStatus().equals("ACTIVE")) {
             DynamoDBMapper mapper = new DynamoDBMapper(client);
-            CreateTableRequest req = mapper.generateCreateTableRequest(Transaction.class).withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+            CreateTableRequest req = mapper.generateCreateTableRequest(Question.class).withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
             CreateTableResult result = client.createTable(req);
             logger.info("Table created " + result.getTableDescription());
         }

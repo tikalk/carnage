@@ -2,9 +2,8 @@ package com.serverless;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.serverless.data.Transaction;
+import com.serverless.data.Answer;
 import com.serverless.db.DynamoDBAdapter;
 import org.apache.log4j.Logger;
 
@@ -23,16 +22,21 @@ public class PostTransactionsHandler implements RequestHandler<Map<String, Objec
 		try{
 			ObjectMapper mapper = new ObjectMapper();
 			Map<String,String> pathParameters =  (Map<String,String>)input.get("pathParameters");
-			String accountId = pathParameters.get("account_id");
-			LOG.info("Posting transactions for " + accountId);
-			Transaction tx = new Transaction();
-			tx.setAccount_id(accountId);
-			JsonNode body = mapper.readTree((String) input.get("body"));
-			float amount = (float) body.get("amount").asDouble();
-			String txId = body.get("transaction_id").asText();
-			tx.setAmount(amount);
-			tx.setTransaction_date(new Date(System.currentTimeMillis()));
-			tx.setTransaction_id(txId);
+			String question_id = pathParameters.get("question_id");
+			String answer = pathParameters.get("answer");
+			String user = pathParameters.get("user");
+			LOG.info("Posting answer for question " + question_id);
+			Answer tx = new Answer()
+					.setQuestion_id(question_id)
+					.setTransaction_date(new Date())
+					.setAnswer(answer)
+					.setUserName(user);
+//			JsonNode body = mapper.readTree((String) input.get("body"));
+//			float amount = (float) body.get("amount").asDouble();
+//			String txId = body.get("transaction_id").asText();
+//			tx.setAmount(amount);
+//			tx.setTransaction_date(new Date(System.currentTimeMillis()));
+//			tx.setTransaction_id(txId);
 			DynamoDBAdapter.getInstance().putTransaction(tx);
 		}catch(Exception e){
 			LOG.error(e,e);

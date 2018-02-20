@@ -1,14 +1,11 @@
 package com.serverless.db;
 
-import com.serverless.data.Transaction;
+import com.serverless.data.Answer;
+import com.serverless.data.Question;
 import junit.framework.TestCase;
 import org.apache.log4j.Logger;
-import org.junit.After;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created by mpandit on 4/13/17.
@@ -22,15 +19,10 @@ public class DynamoDBAdapterTest extends TestCase {
             DynamoDBAdapter adapter = DynamoDBAdapter.getInstance();
             adapter.createTransationsTable();
             for (int i = 0; i < 10; i++) {
-                Transaction t = new Transaction();
-                t.setAccount_id("1234");
-                t.setTransaction_id(UUID.randomUUID().toString());
-                t.setTransaction_date(new Date(System.currentTimeMillis()));
-                t.setAmount(new Random(100).nextFloat());
-                adapter.putTransaction(t);
+                adapter.putTransaction(new Answer().setAnswer_id("123"));
             }
             //now we read
-            List<Transaction> results = adapter.getTransactions("1234");
+            List<Question> results = adapter.getTransactions("1234");
             logger.info("Got " + results.size() + " transactions!");
             assertTrue(results.size()>0);
         }catch(Exception e){

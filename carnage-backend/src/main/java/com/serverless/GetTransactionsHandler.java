@@ -2,14 +2,11 @@ package com.serverless;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.serverless.data.Transaction;
+import com.serverless.data.Question;
 import com.serverless.db.DynamoDBAdapter;
 import org.apache.log4j.Logger;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,12 +17,12 @@ public class GetTransactionsHandler implements RequestHandler<Map<String, Object
 	@Override
 	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 		LOG.info("received: " + input);
-		List<Transaction> tx;
+		List<Question> tx;
 		try {
 			Map<String, String> pathParameters = (Map<String, String>) input.get("pathParameters");
-			String accountId = pathParameters.get("account_id");
-			LOG.info("Getting transactions for " + accountId);
-			tx = DynamoDBAdapter.getInstance().getTransactions(accountId);
+			String questionId = pathParameters.get("question_id");
+			LOG.info("Getting transactions for " + questionId);
+			tx = DynamoDBAdapter.getInstance().getTransactions(questionId);
 		} catch (Exception e) {
 			LOG.error(e, e);
 			Response responseBody = new Response("Failure getting transactions", input);
