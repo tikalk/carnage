@@ -7,6 +7,7 @@ import com.serverless.db.DynamoDBAdapter;
 import org.apache.log4j.Logger;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,11 @@ public class GetTransactionsHandler implements RequestHandler<Map<String, Object
 	@Override
 	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
 		LOG.info("received: " + input);
+		Map<String,String> headers = new HashMap<>();
+		headers.put("X-Powered-By", "AWS Lambda & serverless");
+		headers.put("Access-Control-Allow-Origin", "*");
+
+
 		List<Question> tx;
 		try {
 			Map<String, String> pathParameters = (Map<String, String>) input.get("pathParameters");
@@ -30,13 +36,13 @@ public class GetTransactionsHandler implements RequestHandler<Map<String, Object
 			return ApiGatewayResponse.builder()
 					.setStatusCode(500)
 					.setObjectBody(responseBody)
-					.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
+					.setHeaders(headers)
 					.build();
 		}
 		return ApiGatewayResponse.builder()
 				.setStatusCode(200)
 				.setObjectBody(tx)
-				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & serverless"))
+				.setHeaders(headers)
 				.build();
 	}
 
