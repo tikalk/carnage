@@ -47,6 +47,15 @@ public class DynamoDBAdapter {
         return mapper.query(Question.class, queryExpression);
     }
 
+    public List<Answer> getResult(String userId) throws IOException {
+        DynamoDBMapper mapper = new DynamoDBMapper(client);
+        Map<String, AttributeValue> vals = new HashMap<>();
+        vals.put(":val1",new AttributeValue().withS(userId));
+        DynamoDBQueryExpression<Answer> queryExpression = new DynamoDBQueryExpression<Answer>()
+                .withKeyConditionExpression("user_name = :val1 ")
+                .withExpressionAttributeValues(vals);
+        return mapper.query(Answer.class, queryExpression);
+    }
 
     public void putTransaction(Answer answer) throws IOException{
         DynamoDBMapper mapper = new DynamoDBMapper(client);

@@ -61,6 +61,13 @@ functions:
           path: /question/{question_id}
           method: get
 
+  get-results:
+    handler: com.serverless.GetTransactionsResultsHandler
+    events:
+      - http:
+          path: /result/{user_id}
+          method: get
+
   post-answer:
     handler: com.serverless.PostTransactionsHandler
     events:
