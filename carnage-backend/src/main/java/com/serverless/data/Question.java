@@ -21,10 +21,10 @@ public class Question {
     @DynamoDBHashKey(attributeName = "question_id")
     String questionId;
 
-    @DynamoDBHashKey(attributeName = "question")
+    @DynamoDBAttribute(attributeName = "question")
     String question;
 
-    @DynamoDBHashKey(attributeName = "choices")
+    @DynamoDBAttribute(attributeName = "choices")
     Map<String, String> choices;
 
     @DynamoDBAttribute(attributeName = "right_answer")

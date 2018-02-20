@@ -21,7 +21,7 @@ public class Answer {
     @DynamoDBHashKey(attributeName = "answer_id")
     String answer_id;
 
-    @DynamoDBRangeKey(attributeName = "transaction_date")
+    @DynamoDBAttribute(attributeName = "transaction_date")
     Date transaction_date;
 
     @DynamoDBAttribute(attributeName = "question_id")
