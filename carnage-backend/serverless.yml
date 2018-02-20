@@ -121,10 +121,10 @@ resources:
         AttributeDefinitions:
           - AttributeName: question_id
             AttributeType: S
-          - AttributeName: qustion
+          - AttributeName: question
             AttributeType: S
           - AttributeName: choices
-            AttributeType: S
+            AttributeType: M
           - AttributeName: right_answer
             AttributeType: S
         KeySchema:

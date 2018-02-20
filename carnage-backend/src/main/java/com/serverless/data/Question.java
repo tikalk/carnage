@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Map;
 
 @DynamoDBTable(tableName = "question_table")
 @Data
@@ -20,11 +21,11 @@ public class Question {
     @DynamoDBHashKey(attributeName = "question_id")
     String questionId;
 
-    @DynamoDBHashKey(attributeName = "qustion")
-    String qustion;
+    @DynamoDBHashKey(attributeName = "question")
+    String question;
 
     @DynamoDBHashKey(attributeName = "choices")
-    String choices;
+    Map<String, String> choices;
 
     @DynamoDBAttribute(attributeName = "right_answer")
     String rightAnswer;
