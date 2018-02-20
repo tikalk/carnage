@@ -54,7 +54,7 @@ provider:
 
 # you can add packaging information here
 package:
-  artifact: target/transactions-api-dev.jar
+  artifact: target/original-carnage-dev.jar
 
 functions:
   get-question:
