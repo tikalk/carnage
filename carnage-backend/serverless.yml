@@ -121,12 +121,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: question_id
             AttributeType: S
-          - AttributeName: question
-            AttributeType: S
-          - AttributeName: choices
-            AttributeType: M
-          - AttributeName: right_answer
-            AttributeType: S
+#          - AttributeName: question
+#            AttributeType: S
+#          - AttributeName: choices
+#            AttributeType: M
+#          - AttributeName: right_answer
+#            AttributeType: S
         KeySchema:
           - AttributeName: question_id
             KeyType: HASH
@@ -140,14 +140,14 @@ resources:
         AttributeDefinitions:
           - AttributeName: answer_id
             AttributeType: S
-          - AttributeName: transaction_date
-            AttributeType: S
-          - AttributeName: question_id
-            AttributeType: S
-          - AttributeName: answer
-            AttributeType: S
-          - AttributeName: user_name
-            AttributeType: S
+#          - AttributeName: transaction_date
+#            AttributeType: S
+#          - AttributeName: question_id
+#            AttributeType: S
+#          - AttributeName: answer
+#            AttributeType: S
+#          - AttributeName: user_name
+#            AttributeType: S
         KeySchema:
           - AttributeName: answer_id
             KeyType: HASH
