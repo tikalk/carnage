@@ -28,7 +28,7 @@ class App extends Component {
         !this.loggedIn && <Login onLogin={() => {self.logInUser()}}></Login>
       }      
       {
-        this.loggedIn && this.index > 1 && <Question question={this.question} onSubmit={this.onQuestionSubmitted}></Question>
+        this.loggedIn && this.index > 1 && <Question question={this.question} onSubmit={this.onQuestionSubmitted.bind(this)}></Question>
       }
         
       </div>
@@ -39,24 +39,22 @@ class App extends Component {
     this.onQuestionSubmitted();
   }
 
-  onQuestionSubmitted() {
+  onQuestionSubmitted() {    
+
     axios.get(`${App.URL}${this.index}`)
-      .then((function (that) {
-        return (q) => {
-          debugger;
-          that.question = q;
-          that.index++;
-          that.forceUpdate();
+      .then((q) => {
+        if (q.data) {
+          this.question = q.data[0];
+          this.forceUpdate();
+          this.index++;
         }
-      })(this))
-      .catch((function (that) {
-        return (error) => {
-          
-          that.forceUpdate();
-        }
-      })(this));
-    
-    
+      })
+      .catch((error) => {
+        debugger;
+        this.forceUpdate();
+      });
+
+
   }
 
   logInUser() {

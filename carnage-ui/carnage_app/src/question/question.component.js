@@ -7,7 +7,7 @@ class Question extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedAnswer: this.props.question.answers[0]
+            selectedAnswer: this.props.question.choices[1]
         }
     }
 
@@ -18,7 +18,7 @@ class Question extends Component {
     static TIMEOUT = 5*1000;
 
     componentDidMount() {
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
             this.timeoutReached = true;
         },Question.TIMEOUT)
     }
@@ -30,7 +30,7 @@ class Question extends Component {
                 <form>
                     <div className="answers">
                         {
-                            this.props.question.answers.map((item, index) => (
+                            Object.values(this.props.question.choices).map((item, index) => (
                                 <div key={index}>
                                     <input type="radio" value={item} 
                                         checked={this.state.selectedAnswer === item} 
@@ -63,27 +63,26 @@ class Question extends Component {
 
     submitResponse(event) {
 
+        let self = this;
+
         if (this.answerSubmitted && !this.timeoutReached) {
             this.message = 'Answer Already Submitted';
         } else if (this.timeoutReached) {
             this.message = 'Sorry - Time is up';
+            this.props.onSubmit();
         } else {
-                // ${this.props.question_id}/${answer}/${user}
-            axios.post(`https://807npuj887.execute-api.us-west-1.amazonaws.com/dev/answer/`)
-            .then((function(that){
-                return () => {
-                    that.message = 'You answer was submitted'
-                    that.props.onSubmit();
-                    that.forceUpdate();
+            axios.post(`https://807npuj887.execute-api.us-west-1.amazonaws.com/dev/answer/${this.props.question.questionIdid}/1/123`)
+                .then(() => {
+                    self.message = 'You answer was submitted'
+                    self.props.onSubmit();
+                    // self.forceUpdate();
+                })
+                .catch((error) => {
+                    self.message = error.message;
+                    self.props.onSubmit();
+                    // self.forceUpdate();
                 }
-            })(this))
-            .catch((function(that){
-                return (error) => {
-                    that.message = error.message;
-                    that.props.onSubmit();
-                    that.forceUpdate();
-                }
-            })(this));
+          );
         }
 
         this.answerSubmitted = true;
