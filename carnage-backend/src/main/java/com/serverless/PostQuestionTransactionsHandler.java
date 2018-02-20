@@ -4,14 +4,13 @@ package com.serverless;
         import com.amazonaws.services.lambda.runtime.RequestHandler;
         import com.fasterxml.jackson.databind.JsonNode;
         import com.fasterxml.jackson.databind.ObjectMapper;
+        import com.fasterxml.jackson.databind.node.ObjectNode;
         import com.serverless.data.Answer;
         import com.serverless.data.Question;
         import com.serverless.db.DynamoDBAdapter;
         import org.apache.log4j.Logger;
 
-        import java.util.Collections;
-        import java.util.Date;
-        import java.util.Map;
+        import java.util.*;
 
 public class PostQuestionTransactionsHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
 
@@ -32,10 +31,23 @@ public class PostQuestionTransactionsHandler implements RequestHandler<Map<Strin
             String bodyText = (String) input.get("body");
 			JsonNode body = mapper.readTree(bodyText);
             LOG.info("Posting question body " + bodyText);
-			Map<String, String> choices = (Map<String, String>) body.get("choices");
-			String right_answer = body.get("right_answer").asText();
+
+            ObjectNode choices = (ObjectNode) body.get("choices");
+
+            Map<String, String> choicesMap = new HashMap<>();
+
+            Iterator<String> stringIterator = choices.fieldNames();
+
+            while (stringIterator.hasNext()){
+                String key = stringIterator.next();
+                JsonNode next = choices.get(key);
+                String value = next.textValue();
+                choicesMap.put(key,value);
+            }
+
+            String right_answer = body.get("right_answer").asText();
             String question = body.get("question").asText();
-			tx.setChoices(choices).setQuestion(question).setRightAnswer(right_answer);
+			tx.setChoices(choicesMap).setQuestion(question).setRightAnswer(right_answer);
             DynamoDBAdapter.getInstance().putTransaction(tx);
         }catch(Exception e){
             LOG.error(e,e);
